@@ -13,13 +13,39 @@ class App extends Component {
     }
   };
 
+  // Get user data from github
+  getUserData(){
+    $.ajax({
+      url: 'https://api.github.com/users/'+this.state.userName+'?client_id='+
+            this.props.clientId+'&client_secret='+this.props.clientSecret,
+      dataType: 'json',
+      cache: false,
+      success: function(data){
+        this.setState({
+          userData: data
+        });
+        // console.log(data);
+      }.bind(this),
+      error: function(xhr, status, err){
+        this.setState({
+          userName: null
+        });
+        // console.log(err);
+      }.bind(this)
+    });
+  };
+
+  componentDidMount() {
+    this.getUserData();
+  };
+
   render() {
     return (
       <div>
         {this.state.userName}
       </div>
     );
-  }
+  };
 }
 
 App.propTypes = {
