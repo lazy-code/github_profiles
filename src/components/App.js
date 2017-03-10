@@ -7,7 +7,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      userName: 'romabelka',
+      userName: 'lazy-code',
       userData: {},
       userRepos: [],
       perPage: 5
@@ -17,33 +17,59 @@ class App extends Component {
   // Get user data from github
   getUserData(){
     $.ajax({
-      url: 'https://api.github.com/users/'+this.state.userName+'?client_id='+
-            this.props.clientId+'&client_secret='+this.props.clientSecret,
+      url: 'https://api.github.com/users/'+this.state.userName+
+            '?client_id='+this.props.clientId+
+            '&client_secret='+this.props.clientSecret,
       dataType: 'json',
       cache: false,
       success: function(data){
         this.setState({
           userData: data
         });
-        // console.log(data);
       }.bind(this),
       error: function(xhr, status, err){
         this.setState({
           userName: null
         });
-        // console.log(err);
+      }.bind(this)
+    });
+  };
+
+  // Get user repos from github
+  getUserRepos(){
+    $.ajax({
+      url: 'https://api.github.com/users/'+this.state.userName+
+            '/repos?per_page='+this.state.perPage+
+            '&client_id='+this.props.clientId+
+            '&client_secret='+this.props.clientSecret+
+            '&sort=created',
+      dataType: 'json',
+      cache: false,
+      success: function(data){
+        this.setState({
+          userRepos: data
+        });
+      }.bind(this),
+      error: function(xhr, status, err){
+        this.setState({
+          userName: null
+        });
       }.bind(this)
     });
   };
 
   componentDidMount() {
     this.getUserData();
+    this.getUserRepos();
   };
 
   render() {
+
+    const { userData, userRepos } = this.state;
+
     return (
       <div>
-        <Profile userData={this.state.userData} />
+        <Profile userData={userData} userRepos={userRepos} />
       </div>
     );
   };

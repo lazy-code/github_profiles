@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import RepoList from './RepoList';
 
 class Profile extends Component {
   render() {
@@ -62,6 +63,11 @@ class Profile extends Component {
 
             </div>
           </div>
+
+          <hr/>
+
+          <h3>User Repositories</h3>
+          <RepoList userRepos={this.props.userRepos} />
         </div>
       </div>
     );
@@ -69,8 +75,8 @@ class Profile extends Component {
 }
 
 Profile.propTypes = {
+  // From App Component
   userData: PropTypes.object.isRequired
 };
-Profile.defaultProps = {};
 
 export default Profile;
