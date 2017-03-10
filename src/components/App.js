@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import Profile from './github/Profile';
 
 class App extends Component {
 
@@ -6,8 +7,8 @@ class App extends Component {
     super(props);
 
     this.state = {
-      userName: 'lazy-code',
-      userData: [],
+      userName: 'romabelka',
+      userData: {},
       userRepos: [],
       perPage: 5
     }
@@ -42,7 +43,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        {this.state.userName}
+        <Profile userData={this.state.userData} />
       </div>
     );
   };
