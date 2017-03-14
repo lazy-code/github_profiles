@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Profile from './github/Profile';
+import Search from './github/Search';
 
 class App extends Component {
 
@@ -11,7 +12,9 @@ class App extends Component {
       userData: {},
       userRepos: [],
       perPage: 5
-    }
+    };
+
+    this.handleSubmit = this.handleSubmit.bind(this);
   };
 
   // Get user data from github
@@ -22,16 +25,17 @@ class App extends Component {
             '&client_secret='+this.props.clientSecret,
       dataType: 'json',
       cache: false,
-      success: function(data){
+      success: (data) => {
         this.setState({
           userData: data
         });
-      }.bind(this),
-      error: function(xhr, status, err){
+      },
+      error: (xhr, status, err) => {
+        alert('User not found');
         this.setState({
           userName: null
         });
-      }.bind(this)
+      }
     });
   };
 
@@ -45,16 +49,16 @@ class App extends Component {
             '&sort=created',
       dataType: 'json',
       cache: false,
-      success: function(data){
+      success: (data) => {
         this.setState({
           userRepos: data
         });
-      }.bind(this),
-      error: function(xhr, status, err){
+      },
+      error: (xhr, status, err) => {
         this.setState({
           userName: null
         });
-      }.bind(this)
+      }
     });
   };
 
@@ -63,12 +67,20 @@ class App extends Component {
     this.getUserRepos();
   };
 
+  handleSubmit(username){
+    this.setState({userName: username}, function(){
+      this.getUserData();
+      this.getUserRepos();
+    });
+  }
+
   render() {
 
     const { userData, userRepos } = this.state;
 
     return (
       <div>
+        <Search handleSubmit={this.handleSubmit}/>
         <Profile userData={userData} userRepos={userRepos} />
       </div>
     );
